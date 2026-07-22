@@ -19,28 +19,10 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text-dark); }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.2rem 2.5rem;
-            background: var(--primary);
-            color: #fff;
-        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2.5rem; background: var(--primary); color: #fff; }
         .logo { font-size: 1.25rem; font-weight: 800; letter-spacing: 0.5px; color: #fff; text-decoration: none; }
         .nav-actions { display: flex; gap: 1rem; align-items: center; }
-        .nav-btn {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
+        .nav-btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: all 0.2s; }
         .nav-btn:hover { background: rgba(255,255,255,0.2); }
         .primary-btn { background: var(--accent); border: none; }
         .primary-btn:hover { background: var(--accent-hover); }
@@ -62,7 +44,6 @@
         .btn-cart { width: 100%; margin-top: 1rem; padding: 0.65rem; background: var(--primary); color: #fff; border: none; border-radius: 6px; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: background 0.2s; }
         .btn-cart:hover { background: var(--accent); }
 
-        /* Modal Styles */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 1000; }
         .modal { background: #fff; padding: 2rem; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
         .modal h2 { margin-bottom: 1rem; color: var(--primary); }
@@ -90,7 +71,6 @@
         </div>
     </main>
 
-    <!-- Login/Register Modal -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal">
             <h2 id="modalTitle">Sign In</h2>
@@ -121,16 +101,17 @@
                 }
 
                 grid.innerHTML = products.map(p => {
-                    let imgUrl = (p.imageUrl && p.imageUrl.trim().length > 0) ? p.imageUrl.trim() : null;
+                    let imgUrl = (p.imageUrl && p.imageUrl.trim() !== '') ? p.imageUrl.trim() : null;
                     const nameLower = p.name.toLowerCase();
 
+                    // ONLY fallback to auto-matching if custom imageUrl was not provided
                     if (!imgUrl) {
                         if (nameLower.includes('tea')) {
                             imgUrl = 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=60';
                         } else if (nameLower.includes('chai')) {
                             imgUrl = 'https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=500&auto=format&fit=crop&q=60';
                         } else if (nameLower.includes('honey')) {
-                            imgUrl = 'https://images.unsplash.com/photo-1587049352847-4a222e784d38?w=500&auto=format&fit=crop&q=60';
+                            imgUrl = 'https://i.postimg.cc/hj2zwm23/Image-7-22-26-at-11-51-AM.png';
                         } else if (nameLower.includes('lotus') || nameLower.includes('seed')) {
                             imgUrl = 'https://i.postimg.cc/qRxHwXMc/Image-7-22-26-at-10-33-AM.png';
                         } else {

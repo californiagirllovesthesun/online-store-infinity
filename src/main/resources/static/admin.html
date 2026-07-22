@@ -20,25 +20,9 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text-dark); }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background: var(--primary);
-            color: #fff;
-        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: var(--primary); color: #fff; }
         .logo { font-size: 1.25rem; font-weight: 700; color: #fff; text-decoration: none; }
-        .nav-btn {
-            background: transparent;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
+        .nav-btn { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 0.9rem; }
         .nav-btn:hover { background: rgba(255,255,255,0.1); }
 
         .container { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
@@ -73,18 +57,17 @@
     </nav>
 
     <main class="container">
-        <!-- Add Product Form -->
         <section class="card">
             <h2>Add New Product</h2>
             <form onsubmit="addProduct(event)">
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Product Name *</label>
-                        <input type="text" id="name" placeholder="e.g. Sweet Lotus Seed" required>
+                        <input type="text" id="name" placeholder="e.g. Manuka Honey New Zealand" required>
                     </div>
                     <div class="form-group">
                         <label>Price ($) *</label>
-                        <input type="number" step="0.01" id="price" placeholder="8.50" required>
+                        <input type="number" step="0.01" id="price" placeholder="34.00" required>
                     </div>
                     <div class="form-group">
                         <label>Stock Quantity *</label>
@@ -104,7 +87,6 @@
             </form>
         </section>
 
-        <!-- Product Inventory Table -->
         <section class="card">
             <h2>Current Inventory</h2>
             <table>
@@ -139,16 +121,17 @@
                 }
 
                 tbody.innerHTML = products.map(p => {
-                    let imgUrl = (p.imageUrl && p.imageUrl.trim().length > 0) ? p.imageUrl.trim() : null;
+                    let imgUrl = (p.imageUrl && p.imageUrl.trim() !== '') ? p.imageUrl.trim() : null;
                     const nameLower = p.name.toLowerCase();
 
+                    // ONLY fallback to auto-matching if custom imageUrl was not provided
                     if (!imgUrl) {
                         if (nameLower.includes('tea')) {
                             imgUrl = 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=60';
                         } else if (nameLower.includes('chai')) {
                             imgUrl = 'https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=500&auto=format&fit=crop&q=60';
                         } else if (nameLower.includes('honey')) {
-                            imgUrl = 'https://images.unsplash.com/photo-1587049352847-4a222e784d38?w=500&auto=format&fit=crop&q=60';
+                            imgUrl = 'https://i.postimg.cc/hj2zwm23/Image-7-22-26-at-11-51-AM.png';
                         } else if (nameLower.includes('lotus') || nameLower.includes('seed')) {
                             imgUrl = 'https://i.postimg.cc/qRxHwXMc/Image-7-22-26-at-10-33-AM.png';
                         } else {
