@@ -117,7 +117,7 @@
         }
         .buy-btn:hover { background: var(--accent); }
 
-        /* Modal / Login Popup */
+        /* Modal / Authentication Popup */
         .modal-backdrop {
             position: fixed;
             inset: 0;
@@ -133,10 +133,10 @@
             padding: 2rem;
             border-radius: 12px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
         .modal-header h3 { font-size: 1.25rem; color: var(--primary); }
         .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
         
@@ -149,22 +149,27 @@
         .form-group input { width: 100%; padding: 0.65rem; border: 1px solid var(--border); border-radius: 6px; outline: none; }
         .form-group input:focus { border-color: var(--accent); }
 
+        .form-footer-links { display: flex; justify-content: space-between; margin-top: 0.75rem; font-size: 0.82rem; }
+        .form-footer-links a { color: var(--accent); text-decoration: none; font-weight: 500; cursor: pointer; }
+        .form-footer-links a:hover { text-decoration: underline; }
+
         .submit-btn { width: 100%; padding: 0.75rem; background: var(--accent); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 0.5rem; }
         .submit-btn:hover { background: var(--accent-hover); }
+
+        .modal-view { display: none; }
+        .modal-view.active { display: block; }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar">
         <a href="/" class="logo">INFINITY STORE</a>
         <div class="nav-links">
             <a href="/admin.html" class="nav-btn">Admin Portal</a>
-            <button class="nav-btn primary" onclick="openLoginModal()">Sign In</button>
+            <button class="nav-btn primary" id="authNavBtn" onclick="openLoginModal('login')">Sign In</button>
         </div>
     </nav>
 
-    <!-- Hero Header -->
     <header class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -173,36 +178,90 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="container">
         <h2 class="section-title">Explore Products</h2>
         <div id="productGrid" class="grid"></div>
     </main>
 
-    <!-- Login Modal -->
+    <!-- Modal Container -->
     <div id="loginModal" class="modal-backdrop">
         <div class="modal">
-            <div class="modal-header">
-                <h3 id="modalTitle">Customer Login</h3>
-                <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+            
+            <!-- 1. LOGIN VIEW -->
+            <div id="loginView" class="modal-view active">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Customer Login</h3>
+                    <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+                </div>
+
+                <div class="role-toggle">
+                    <button class="role-btn active" id="customerTab" onclick="setLoginRole('customer')">Customer</button>
+                    <button class="role-btn" id="adminTab" onclick="setLoginRole('admin')">Admin</button>
+                </div>
+
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="user@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="submit-btn" id="loginSubmitBtn">Log In</button>
+                    
+                    <div class="form-footer-links">
+                        <a id="forgotPassLink" onclick="switchView('forgot')">Forgot password?</a>
+                        <a id="createAccLink" onclick="switchView('register')">Create an account</a>
+                    </div>
+                </form>
             </div>
 
-            <div class="role-toggle">
-                <button class="role-btn active" id="customerTab" onclick="setLoginRole('customer')">Customer</button>
-                <button class="role-btn" id="adminTab" onclick="setLoginRole('admin')">Admin</button>
+            <!-- 2. CREATE ACCOUNT VIEW -->
+            <div id="registerView" class="modal-view">
+                <div class="modal-header">
+                    <h3>Create Customer Account</h3>
+                    <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+                </div>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="regEmail" placeholder="yourname@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Create Password</label>
+                        <input type="password" id="regPassword" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Register</button>
+                    <div class="form-footer-links">
+                        <span>Already have an account?</span>
+                        <a onclick="switchView('login')">Sign In</a>
+                    </div>
+                </form>
             </div>
 
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" placeholder="user@example.com" required>
+            <!-- 3. FORGOT PASSWORD VIEW -->
+            <div id="forgotView" class="modal-view">
+                <div class="modal-header">
+                    <h3>Reset Password</h3>
+                    <button class="close-btn" onclick="closeLoginModal()">&times;</button>
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="submit-btn" id="loginSubmitBtn">Log In</button>
-            </form>
+                <form onsubmit="handleResetPassword(event)">
+                    <div class="form-group">
+                        <label>Account Email</label>
+                        <input type="email" id="resetEmail" placeholder="user@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="resetNewPassword" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Update Password</button>
+                    <div class="form-footer-links">
+                        <a onclick="switchView('login')">&larr; Back to Login</a>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
 
@@ -225,7 +284,6 @@
                     let imgUrl = p.imageUrl;
                     const nameLower = p.name.toLowerCase();
 
-                    // Smart image matching if no custom imageUrl was supplied
                     if (!imgUrl || imgUrl.trim() === '') {
                         if (nameLower.includes('tea')) {
                             imgUrl = 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=60';
@@ -240,10 +298,7 @@
 
                     return `
                         <div class="product-card">
-                            <img src="${imgUrl}" 
-                                 alt="${p.name}" 
-                                 class="product-img" 
-                                 onerror="this.onerror=null; this.src='${fallbackImg}';">
+                            <img src="${imgUrl}" alt="${p.name}" class="product-img" onerror="this.onerror=null; this.src='${fallbackImg}';">
                             <div class="product-body">
                                 <h3 class="product-title">${p.name}</h3>
                                 <div class="product-meta">
@@ -265,12 +320,20 @@
             alert(`Added "${productName}" to your cart!`);
         }
 
-        function openLoginModal() {
+        function openLoginModal(view = 'login') {
             document.getElementById('loginModal').style.display = 'flex';
+            switchView(view);
         }
 
         function closeLoginModal() {
             document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function switchView(viewName) {
+            document.querySelectorAll('.modal-view').forEach(v => v.classList.remove('active'));
+            if (viewName === 'login') document.getElementById('loginView').classList.add('active');
+            if (viewName === 'register') document.getElementById('registerView').classList.add('active');
+            if (viewName === 'forgot') document.getElementById('forgotView').classList.add('active');
         }
 
         function setLoginRole(role) {
@@ -279,15 +342,71 @@
             document.getElementById('adminTab').classList.toggle('active', role === 'admin');
             document.getElementById('modalTitle').innerText = role === 'customer' ? 'Customer Login' : 'Admin Login';
             document.getElementById('loginSubmitBtn').innerText = role === 'customer' ? 'Log In' : 'Access Admin Dashboard';
+            document.getElementById('createAccLink').style.display = role === 'customer' ? 'inline' : 'none';
         }
 
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
-            if (currentRole === 'admin') {
-                window.location.href = '/admin.html';
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                if (data.role === 'ADMIN') {
+                    window.location.href = '/admin.html';
+                } else {
+                    alert(`Welcome back, ${data.email}!`);
+                    closeLoginModal();
+                }
             } else {
-                alert('Successfully logged in as Customer!');
-                closeLoginModal();
+                const error = await res.json();
+                alert(error.message || 'Login failed.');
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                alert(data.message);
+                switchView('login');
+            } else {
+                alert(data.message || 'Registration failed.');
+            }
+        }
+
+        async function handleResetPassword(e) {
+            e.preventDefault();
+            const email = document.getElementById('resetEmail').value;
+            const newPassword = document.getElementById('resetNewPassword').value;
+
+            const res = await fetch('/api/auth/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, newPassword })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                alert(data.message);
+                switchView('login');
+            } else {
+                alert(data.message || 'Password reset failed.');
             }
         }
 
