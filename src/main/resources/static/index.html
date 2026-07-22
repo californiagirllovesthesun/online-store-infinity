@@ -5,67 +5,288 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Store Infinity</title>
     <style>
-        :root { --primary: #111827; --bg: #ffffff; --card-bg: #f9fafb; --border: #e5e7eb; }
+        :root {
+            --primary: #0f172a;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: system-ui, sans-serif; background-color: var(--bg); color: var(--primary); }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text-dark); }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .logo { font-size: 1.25rem; font-weight: 700; letter-spacing: 1px; color: #fff; text-decoration: none; }
+        .nav-links { display: flex; gap: 1rem; align-items: center; }
+        .nav-btn {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+        .nav-btn.primary { background: var(--accent); border-color: var(--accent); }
+        .nav-btn.primary:hover { background: var(--accent-hover); }
+
+        /* Hero Banner */
+        .hero {
+            position: relative;
+            height: 340px;
+            background: linear-gradient(135deg, #0b0d17 0%, #1a1c2e 100%), url('/galaxy.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #ffffff;
+        }
+        .hero-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.55); }
+        .hero-content { position: relative; z-index: 1; max-width: 600px; padding: 0 1rem; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: 1px; }
+        .hero p { font-size: 1.15rem; opacity: 0.9; color: #cbd5e1; }
+
+        /* Container & Grid */
+        .container { max-width: 1100px; margin: 3rem auto; padding: 0 1.5rem; }
+        .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--primary); }
         
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #000; color: #fff; }
-        .navbar a { color: #fff; text-decoration: none; margin-left: 1rem; font-size: 0.9rem; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
 
-        .hero { position: relative; height: 320px; background: #000 url('/galaxy.jpg') center/cover no-repeat; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; }
-        .hero-overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45); }
-        .hero-content { position: relative; z-index: 1; }
-        .hero h1 { font-size: 2.5rem; letter-spacing: 2px; }
+        /* Product Card */
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #f1f5f9;
+        }
+        .product-body { padding: 1.25rem; display: flex; flex-direction: column; flex-grow: 1; }
+        .product-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark); }
+        .product-meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 1rem; }
+        .price { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+        .stock-badge { font-size: 0.8rem; color: var(--text-muted); background: #f1f5f9; padding: 4px 8px; border-radius: 4px; }
+        
+        .buy-btn {
+            width: 100%;
+            margin-top: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .buy-btn:hover { background: var(--accent); }
 
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
-        .product-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; text-align: center; }
-        .product-card h3 { margin-bottom: 0.5rem; }
-        .price { font-size: 1.25rem; font-weight: bold; color: #059669; margin: 0.5rem 0; }
-        .buy-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-top: 0.5rem; }
+        /* Modal / Login Popup */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+        .modal {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-header h3 { font-size: 1.25rem; color: var(--primary); }
+        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
+        
+        .role-toggle { display: flex; background: #f1f5f9; padding: 4px; border-radius: 8px; margin-bottom: 1.25rem; }
+        .role-btn { flex: 1; padding: 8px; border: none; background: transparent; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 0.85rem; color: var(--text-muted); }
+        .role-btn.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-dark); }
+        .form-group input { width: 100%; padding: 0.65rem; border: 1px solid var(--border); border-radius: 6px; outline: none; }
+        .form-group input:focus { border-color: var(--accent); }
+
+        .submit-btn { width: 100%; padding: 0.75rem; background: var(--accent); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 0.5rem; }
+        .submit-btn:hover { background: var(--accent-hover); }
     </style>
 </head>
 <body>
 
+    <!-- Navbar -->
     <nav class="navbar">
-        <div class="logo"><strong>Online Store Infinity</strong></div>
-        <div>
-            <a href="/index.html">Store</a>
-            <a href="/admin.html">Admin Portal</a>
+        <a href="/" class="logo">INFINITY STORE</a>
+        <div class="nav-links">
+            <a href="/admin.html" class="nav-btn">Admin Portal</a>
+            <button class="nav-btn primary" onclick="openLoginModal()">Sign In</button>
         </div>
     </nav>
 
+    <!-- Hero Header -->
     <header class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1>Online Store Infinity</h1>
-            <p>Welcome to Our Shop</p>
+            <p>Discover curations, teas, and specialty items across the cosmos.</p>
         </div>
     </header>
 
+    <!-- Main Content -->
     <main class="container">
-        <h2 style="margin-bottom: 1.5rem;">Available Products</h2>
+        <h2 class="section-title">Explore Products</h2>
         <div id="productGrid" class="grid"></div>
     </main>
 
-    <script>
-        async function fetchProducts() {
-            const res = await fetch('/api/products');
-            const products = await res.json();
-            const grid = document.getElementById('productGrid');
-            if (products.length === 0) {
-                grid.innerHTML = '<p>No products available right now.</p>';
-                return;
-            }
-            grid.innerHTML = products.map(p => `
-                <div class="product-card">
-                    <h3>${p.name}</h3>
-                    <div class="price">$${p.price.toFixed(2)}</div>
-                    <p style="color: #6b7280; font-size: 0.85rem;">In Stock: ${p.quantity}</p>
-                    <button class="buy-btn" onclick="alert('Added ${p.name} to cart!')">Add to Cart</button>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal-backdrop">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Customer Login</h3>
+                <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+            </div>
+
+            <div class="role-toggle">
+                <button class="role-btn active" id="customerTab" onclick="setLoginRole('customer')">Customer</button>
+                <button class="role-btn" id="adminTab" onclick="setLoginRole('admin')">Admin</button>
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="user@example.com" required>
                 </div>
-            `).join('');
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="submit-btn" id="loginSubmitBtn">Log In</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'customer';
+
+        // Fetch products from Spring Boot API
+        async function fetchProducts() {
+            const grid = document.getElementById('productGrid');
+            try {
+                const res = await fetch('/api/products');
+                const products = await res.json();
+
+                if (!products || products.length === 0) {
+                    grid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center;">No products available right now.</p>';
+                    return;
+                }
+
+                grid.innerHTML = products.map(p => {
+                    // Smart image placeholder based on item name
+                    let imgUrl = p.imageUrl || '/galaxy.jpg';
+                    if (p.name.toLowerCase().includes('tea')) {
+                        imgUrl = 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=60';
+                    } else if (p.name.toLowerCase().includes('chai')) {
+                        imgUrl = 'https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=500&auto=format&fit=crop&q=60';
+                    }
+
+                    return `
+                        <div class="product-card">
+                            <img src="${imgUrl}" alt="${p.name}" class="product-img">
+                            <div class="product-body">
+                                <h3 class="product-title">${p.name}</h3>
+                                <div class="product-meta">
+                                    <span class="price">$${p.price.toFixed(2)}</span>
+                                    <span class="stock-badge">In Stock: ${p.quantity}</span>
+                                </div>
+                                <button class="buy-btn" onclick="addToCart('${p.name}')">Add to Cart</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error(err);
+                grid.innerHTML = '<p style="color: red; grid-column: 1/-1; text-align: center;">Failed to load store items.</p>';
+            }
         }
+
+        function addToCart(productName) {
+            alert(`Added "${productName}" to your cart!`);
+        }
+
+        // Modal Handlers
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function setLoginRole(role) {
+            currentRole = role;
+            document.getElementById('customerTab').classList.toggle('active', role === 'customer');
+            document.getElementById('adminTab').classList.toggle('active', role === 'admin');
+            document.getElementById('modalTitle').innerText = role === 'customer' ? 'Customer Login' : 'Admin Login';
+            document.getElementById('loginSubmitBtn').innerText = role === 'customer' ? 'Log In' : 'Access Admin Dashboard';
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            if (currentRole === 'admin') {
+                window.location.href = '/admin.html';
+            } else {
+                alert('Successfully logged in as Customer!');
+                closeLoginModal();
+            }
+        }
+
+        // Close modal when clicking outside box
+        window.onclick = function(e) {
+            const modal = document.getElementById('loginModal');
+            if (e.target === modal) closeLoginModal();
+        };
+
         fetchProducts();
     </script>
 </body>
