@@ -98,8 +98,9 @@
             background: #f1f5f9;
         }
         .product-body { padding: 1.25rem; display: flex; flex-direction: column; flex-grow: 1; }
-        .product-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark); }
-        .product-meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 1rem; }
+        .product-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.3rem; color: var(--text-dark); }
+        .product-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.4; }
+        .product-meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 0.5rem; }
         .price { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
         .stock-badge { font-size: 0.8rem; color: var(--text-muted); background: #f1f5f9; padding: 4px 8px; border-radius: 4px; }
         
@@ -117,7 +118,7 @@
         }
         .buy-btn:hover { background: var(--accent); }
 
-        /* Modal / Authentication Popup */
+        /* Modal Container */
         .modal-backdrop {
             position: fixed;
             inset: 0;
@@ -301,6 +302,7 @@
                             <img src="${imgUrl}" alt="${p.name}" class="product-img" onerror="this.onerror=null; this.src='${fallbackImg}';">
                             <div class="product-body">
                                 <h3 class="product-title">${p.name}</h3>
+                                ${p.description ? `<p class="product-desc">${p.description}</p>` : ''}
                                 <div class="product-meta">
                                     <span class="price">$${p.price.toFixed(2)}</span>
                                     <span class="stock-badge">In Stock: ${p.quantity}</span>
