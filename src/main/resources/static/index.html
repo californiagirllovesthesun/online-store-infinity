@@ -5,255 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Store Infinity</title>
     <style>
-        :root {
-            --primary: #111827;
-            --accent: #d4af37;
-            --bg-color: #ffffff;
-            --card-bg: #f9fafb;
-            --border-color: #e5e7eb;
-            --text-dark: #1f2937;
-            --danger: #ef4444;
-        }
-
+        :root { --primary: #111827; --bg: #ffffff; --card-bg: #f9fafb; --border: #e5e7eb; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, sans-serif; background-color: var(--bg); color: var(--primary); }
+        
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #000; color: #fff; }
+        .navbar a { color: #fff; text-decoration: none; margin-left: 1rem; font-size: 0.9rem; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            line-height: 1.5;
-        }
+        .hero { position: relative; height: 320px; background: #000 url('/galaxy.jpg') center/cover no-repeat; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; }
+        .hero-overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45); }
+        .hero-content { position: relative; z-index: 1; }
+        .hero h1 { font-size: 2.5rem; letter-spacing: 2px; }
 
-        /* Hero Banner */
-        .hero {
-            position: relative;
-            height: 360px;
-            background: #000 url('/galaxy.jpg') center/cover no-repeat;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: #ffffff;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            padding: 0 1rem;
-        }
-
-        .hero h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            letter-spacing: 1px;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 900px;
-            margin: 2.5rem auto;
-            padding: 0 1.5rem;
-        }
-
-        /* Card Form */
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .card h2 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr auto;
-            gap: 10px;
-        }
-
-        input {
-            padding: 10px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.95rem;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: var(--primary);
-        }
-
-        button.btn-add {
-            background-color: #10b981;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        button.btn-add:hover {
-            background-color: #059669;
-        }
-
-        /* Product Table */
-        .table-container {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f3f4f6;
-            color: #4b5563;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            padding: 12px 16px;
-        }
-
-        td {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.95rem;
-        }
-
-        tr:last-child td { border-bottom: none; }
-
-        button.btn-remove {
-            background-color: var(--danger);
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-
-        button.btn-remove:hover {
-            background-color: #dc2626;
-        }
-
-        @media (max-width: 680px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 2rem; }
-        }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+        .product-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; text-align: center; }
+        .product-card h3 { margin-bottom: 0.5rem; }
+        .price { font-size: 1.25rem; font-weight: bold; color: #059669; margin: 0.5rem 0; }
+        .buy-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-top: 0.5rem; }
     </style>
 </head>
 <body>
 
-    <!-- Galaxy Hero Header -->
+    <nav class="navbar">
+        <div class="logo"><strong>Online Store Infinity</strong></div>
+        <div>
+            <a href="/index.html">Store</a>
+            <a href="/admin.html">Admin Portal</a>
+        </div>
+    </nav>
+
     <header class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1>Online Store Infinity</h1>
-            <p>Welcome to Your Store</p>
+            <p>Welcome to Our Shop</p>
         </div>
     </header>
 
-    <div class="container">
-        <!-- Add Item Form -->
-        <div class="card">
-            <h2>Add Product</h2>
-            <div class="form-grid">
-                <input type="text" id="name" placeholder="Product Name">
-                <input type="number" id="price" placeholder="Price ($)" step="0.01">
-                <input type="number" id="quantity" placeholder="Quantity">
-                <button class="btn-add" onclick="addProduct()">Add Product</button>
-            </div>
-        </div>
-
-        <!-- Inventory List -->
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="productTable"></tbody>
-            </table>
-        </div>
-    </div>
+    <main class="container">
+        <h2 style="margin-bottom: 1.5rem;">Available Products</h2>
+        <div id="productGrid" class="grid"></div>
+    </main>
 
     <script>
-        const API_URL = '/api/products';
-
         async function fetchProducts() {
-            const response = await fetch(API_URL);
-            const products = await response.json();
-            const tbody = document.getElementById('productTable');
-
+            const res = await fetch('/api/products');
+            const products = await res.json();
+            const grid = document.getElementById('productGrid');
             if (products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem;">No products in store yet.</td></tr>';
+                grid.innerHTML = '<p>No products available right now.</p>';
                 return;
             }
-
-            tbody.innerHTML = products.map(p => `
-                <tr>
-                    <td>${p.id}</td>
-                    <td><strong>${p.name}</strong></td>
-                    <td>$${p.price.toFixed(2)}</td>
-                    <td>${p.quantity}</td>
-                    <td><button class="btn-remove" onclick="deleteProduct(${p.id})">Remove</button></td>
-                </tr>
+            grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <h3>${p.name}</h3>
+                    <div class="price">$${p.price.toFixed(2)}</div>
+                    <p style="color: #6b7280; font-size: 0.85rem;">In Stock: ${p.quantity}</p>
+                    <button class="buy-btn" onclick="alert('Added ${p.name} to cart!')">Add to Cart</button>
+                </div>
             `).join('');
         }
-
-        async function addProduct() {
-            const name = document.getElementById('name').value.trim();
-            const price = parseFloat(document.getElementById('price').value);
-            const quantity = parseInt(document.getElementById('quantity').value);
-
-            if (!name || isNaN(price) || isNaN(quantity)) return alert('Please complete all fields.');
-
-            await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, price, quantity })
-            });
-
-            document.getElementById('name').value = '';
-            document.getElementById('price').value = '';
-            document.getElementById('quantity').value = '';
-            fetchProducts();
-        }
-
-        async function deleteProduct(id) {
-            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-            fetchProducts();
-        }
-
         fetchProducts();
     </script>
 </body>
