@@ -208,8 +208,8 @@
 
     <script>
         let currentRole = 'customer';
+        const fallbackImg = 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=500&auto=format&fit=crop&q=60';
 
-        // Fetch products from Spring Boot API
         async function fetchProducts() {
             const grid = document.getElementById('productGrid');
             try {
@@ -222,17 +222,28 @@
                 }
 
                 grid.innerHTML = products.map(p => {
-                    // Smart image placeholder based on item name
-                    let imgUrl = p.imageUrl || '/galaxy.jpg';
-                    if (p.name.toLowerCase().includes('tea')) {
-                        imgUrl = 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=60';
-                    } else if (p.name.toLowerCase().includes('chai')) {
-                        imgUrl = 'https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=500&auto=format&fit=crop&q=60';
+                    let imgUrl = p.imageUrl;
+                    const nameLower = p.name.toLowerCase();
+
+                    // Smart image matching if no custom imageUrl was supplied
+                    if (!imgUrl || imgUrl.trim() === '') {
+                        if (nameLower.includes('tea')) {
+                            imgUrl = 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=60';
+                        } else if (nameLower.includes('chai')) {
+                            imgUrl = 'https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=500&auto=format&fit=crop&q=60';
+                        } else if (nameLower.includes('honey')) {
+                            imgUrl = 'https://images.unsplash.com/photo-1587049352847-4a222e784d38?w=500&auto=format&fit=crop&q=60';
+                        } else {
+                            imgUrl = fallbackImg;
+                        }
                     }
 
                     return `
                         <div class="product-card">
-                            <img src="${imgUrl}" alt="${p.name}" class="product-img">
+                            <img src="${imgUrl}" 
+                                 alt="${p.name}" 
+                                 class="product-img" 
+                                 onerror="this.onerror=null; this.src='${fallbackImg}';">
                             <div class="product-body">
                                 <h3 class="product-title">${p.name}</h3>
                                 <div class="product-meta">
@@ -254,7 +265,6 @@
             alert(`Added "${productName}" to your cart!`);
         }
 
-        // Modal Handlers
         function openLoginModal() {
             document.getElementById('loginModal').style.display = 'flex';
         }
@@ -281,7 +291,6 @@
             }
         }
 
-        // Close modal when clicking outside box
         window.onclick = function(e) {
             const modal = document.getElementById('loginModal');
             if (e.target === modal) closeLoginModal();
